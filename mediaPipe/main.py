@@ -15,7 +15,11 @@ compareIndex = [[18,4], [6,8], [10, 12], [14,16], [18,20]]
 open = [False,False,False,False,False]
 gesture = [[True, True, True, True, True, "Hi!"],
            [False, True, True, False, False, "V!"],
-           [True, True, False, False, True, "SpiderMan!"]]
+           [True, True, False, False, True, "SpiderMan!"],
+           [True, False, False, False, False, "Good!"],
+           [False, False, True, False, False, "Fuck!"],
+           [True, False, False, False, True, "Promise Me!"],
+           [True, True, False, False, False, "BANG!"]]
 while True:
     success,img = cap.read()
     h,w,c = img.shape
