@@ -2,11 +2,21 @@ import cv2
 import mediapipe as mp
 import math
 
+import RPi.GPIO as GPIO
+from gtts import gTTS
+from IPython.display import Audio 
+# !pip install gTTS  다운!
+
+
 cap = cv2.VideoCapture(0)
 
 mphands = mp.solutions.hands
 my_hands = mphands.Hands()
 mpDraw = mp.solutions.drawing_utils
+
+GPIO.setmode(GPIO.BCM) #BCM(BCM GPIO 기준), BOARD(보드 핀 번호 기준)
+GPIO.setup(16, GPIO.OUT)
+GPIO.output(16, GPIO.LOW)
 
 def dist(x1,y1,x2,y2):
     return math.sqrt(math.pow(x1 - x2, 2)) + math.sqrt(math.pow(y1 - y2, 2))
@@ -19,7 +29,8 @@ gesture = [[True, True, True, True, True, "Hi!"],
            [True, False, False, False, False, "Good!"],
            [False, False, True, False, False, "Fuck!"],
            [True, False, False, False, True, "Promise Me!"],
-           [True, True, False, False, False, "BANG!"]]
+           [True, True, False, False, False, "BANG!"],
+           [False, False, False, False, False, "Danger"]]
 while True:
     success,img = cap.read()
     h,w,c = img.shape
@@ -42,3 +53,9 @@ while True:
     cv2.imshow("HandTracking", img)
     cv2.waitKey(1)
 
+
+
+def voice():
+    kor_wav = gTTS('안녕!', lang = 'ko') 
+    kor_wav.save('kor.wav')
+    display(Audio('kor.wav', autoplay=True))
