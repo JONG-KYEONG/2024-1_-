@@ -33,7 +33,7 @@ gesture = [[True, True, True, True, True, "Hi!"],
 
 
 def speak (text):
-    tts = gTTS(text=text, lang='ko') 
+    tts = gTTS(text=text) 
     filename='voice.mp3'
     tts.save(filename)
     playsound.playsound (filename)
