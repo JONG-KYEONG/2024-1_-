@@ -18,7 +18,7 @@ GPIO.setup(LCD_D4, GPIO.OUT)
 GPIO.setup(LCD_D5, GPIO.OUT)
 GPIO.setup(LCD_D6, GPIO.OUT)
 GPIO.setup(LCD_D7, GPIO.OUT)
-
+GPIO.setwarnings(False)
 # Initialize the LCD
 lcd = CharLCD(cols=16, rows=2, pin_rs=LCD_RS, pin_e=LCD_E,
               pins_data=[LCD_D4, LCD_D5, LCD_D6, LCD_D7],
