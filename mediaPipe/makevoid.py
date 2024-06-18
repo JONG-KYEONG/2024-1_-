@@ -1,5 +1,4 @@
 from gtts import gTTS
-import playsound
 
 def make (text):
     tts = gTTS(text=text) 
