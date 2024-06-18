@@ -11,7 +11,7 @@ LCD_D6 = 4
 LCD_D7 = 1
 
 # GPIO setup
-GPIO.setmode(GPIO.BOARD)  # Use physical pin numbering
+GPIO.setmode(GPIO.BCM)  # Use physical pin numbering
 GPIO.setup(LCD_RS, GPIO.OUT)
 GPIO.setup(LCD_E, GPIO.OUT)
 GPIO.setup(LCD_D4, GPIO.OUT)
