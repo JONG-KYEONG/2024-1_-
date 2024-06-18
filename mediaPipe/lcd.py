@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 
-# LCD 핀 설정
+# GPIO 핀 설정
 LCD_RS = 11
 LCD_E = 10
 LCD_D4 = 6
@@ -9,7 +9,7 @@ LCD_D5 = 5
 LCD_D6 = 4
 LCD_D7 = 1
 
-# LCD 명령어 상수
+# 명령어 상수
 LCD_CLEAR = 0x01
 LCD_RETURN_HOME = 0x02
 LCD_ENTRY_MODE_SET = 0x04
@@ -19,38 +19,24 @@ LCD_FUNCTION_SET = 0x20
 LCD_SET_CGRAM_ADDR = 0x40
 LCD_SET_DDRAM_ADDR = 0x80
 
-# LCD 명령어 비트
-LCD_ENTRY_SH = 0x01
-LCD_ENTRY_ID = 0x02
-
-# LCD 켜기/끄기 명령어
-LCD_DISPLAY_ON = 0x04
-LCD_DISPLAY_OFF = 0x00
-LCD_CURSOR_ON = 0x02
-LCD_CURSOR_OFF = 0x00
-LCD_BLINK_ON = 0x01
-LCD_BLINK_OFF = 0x00
-
-# LCD 시리얼/패러럴 모드
-LCD_8BITMODE = 0x10
-LCD_4BITMODE = 0x00
-LCD_2LINE = 0x08
-LCD_1LINE = 0x00
-LCD_5x10DOTS = 0x04
-LCD_5x8DOTS = 0x00
-
 # GPIO 초기화
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
+GPIO.setup(LCD_RS, GPIO.OUT)
+GPIO.setup(LCD_E, GPIO.OUT)
+GPIO.setup(LCD_D4, GPIO.OUT)
+GPIO.setup(LCD_D5, GPIO.OUT)
+GPIO.setup(LCD_D6, GPIO.OUT)
+GPIO.setup(LCD_D7, GPIO.OUT)
 
 # LCD 초기화 함수
 def lcd_init():
-    lcd_byte(0x33, LCD_CMD)
-    lcd_byte(0x32, LCD_CMD)
-    lcd_byte(0x28, LCD_CMD)
-    lcd_byte(0x0C, LCD_CMD)
-    lcd_byte(0x06, LCD_CMD)
-    lcd_byte(0x01, LCD_CMD)
+    lcd_byte(0x33, False)
+    lcd_byte(0x32, False)
+    lcd_byte(LCD_FUNCTION_SET | LCD_4BITMODE | LCD_2LINE | LCD_5x8DOTS, False)
+    lcd_byte(LCD_DISPLAY_CONTROL | LCD_DISPLAY_ON, False)
+    lcd_byte(LCD_CLEAR, False)
+    time.sleep(0.002)
 
 # LCD 바이트 전송 함수
 def lcd_byte(bits, mode):
@@ -92,34 +78,23 @@ def lcd_toggle_enable():
     time.sleep(0.0005)
 
 # LCD 문자열 출력 함수
-def lcd_string(message, line):
-    if line == 1:
-        lcd_byte(0x80, LCD_CMD)
-    if line == 2:
-        lcd_byte(0xC0, LCD_CMD)
-    if line == 3:
-        lcd_byte(0x94, LCD_CMD)
-    if line == 4:
-        lcd_byte(0xD4, LCD_CMD)
+def lcd_string(message):
+    message = message.ljust(16, " ")
+    for i in range(16):
+        lcd_byte(ord(message[i]), True)
 
-    for char in message:
-        lcd_byte(ord(char), LCD_CHR)
+# LCD 지우기 함수
+def lcd_clear():
+    lcd_byte(LCD_CLEAR, False)
+    time.sleep(0.002)
 
 # 메인 함수
 def main():
-    # GPIO 핀 초기화
-    GPIO.setup(LCD_E, GPIO.OUT)
-    GPIO.setup(LCD_RS, GPIO.OUT)
-    GPIO.setup(LCD_D4, GPIO.OUT)
-    GPIO.setup(LCD_D5, GPIO.OUT)
-    GPIO.setup(LCD_D6, GPIO.OUT)
-    GPIO.setup(LCD_D7, GPIO.OUT)
-
     # LCD 초기화
     lcd_init()
 
     # LCD에 문자열 출력
-    lcd_string("HELLO WORLD", 1)
+    lcd_string("HELLO WORLD")
 
     try:
         while True:
@@ -130,14 +105,11 @@ def main():
 
     finally:
         # LCD 지우기
-        lcd_byte(LCD_CLEAR, LCD_CMD)
-        lcd_string("", 1)
-        lcd_string("", 2)
+        lcd_clear()
         GPIO.cleanup()
 
 if __name__ == '__main__':
     main()
-
 
 
 # import wiringpi as wp
