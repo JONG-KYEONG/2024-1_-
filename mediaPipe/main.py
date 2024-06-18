@@ -4,9 +4,8 @@ import math
 
 import RPi.GPIO as GPIO
 from gtts import gTTS
-from IPython.display import Audio 
+import playsound
 # !pip install gTTS  다운!
-
 
 cap = cv2.VideoCapture(0)
 
@@ -32,10 +31,12 @@ gesture = [[True, True, True, True, True, "Hi!"],
            [True, True, False, False, False, "BANG!"],
            [False, False, False, False, False, "Danger"]]
 
-def voice(string):
-    wav = gTTS(string) 
-    wav.save('voice.wav')
-    display(Audio('voice.wav', autoplay=True))
+
+def speak (text):
+    tts = gTTS(text=text, lang='ko') 
+    filename='voice.mp3'
+    tts.save(filename)
+    playsound.playsound (filename)
 
 while True:
     success,img = cap.read()
@@ -55,7 +56,7 @@ while True:
                     if(gesture[i][j] != open[j]): flag = False
                 if(flag == True):
                     cv2.putText(img, gesture[i][5], (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)
-                    voice(gesture[i][5])
+                    speak(gesture[i][5])
             mpDraw.draw_landmarks (img, handLms, mphands. HAND_CONNECTIONS)
     cv2.imshow("HandTracking", img)
     cv2.waitKey(1)
