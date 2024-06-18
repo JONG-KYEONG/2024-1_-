@@ -31,13 +31,6 @@ gesture = [[True, True, True, True, True, "Hi!"],
            [True, True, False, False, False, "BANG!"],
            [False, False, False, False, False, "Danger"]]
 
-
-def speak (text):
-    tts = gTTS(text=text) 
-    filename='voice.mp3'
-    tts.save(filename)
-    playsound.playsound (filename)
-
 while True:
     success,img = cap.read()
     h,w,c = img.shape
@@ -56,7 +49,7 @@ while True:
                     if(gesture[i][j] != open[j]): flag = False
                 if(flag == True):
                     cv2.putText(img, gesture[i][5], (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)
-                    speak(gesture[i][5])
+                    playsound.playsound (gesture[i][5]+'.mp3')
             mpDraw.draw_landmarks (img, handLms, mphands. HAND_CONNECTIONS)
     cv2.imshow("HandTracking", img)
     cv2.waitKey(1)
