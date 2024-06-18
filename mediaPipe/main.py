@@ -31,6 +31,12 @@ gesture = [[True, True, True, True, True, "Hi!"],
            [True, False, False, False, True, "Promise Me!"],
            [True, True, False, False, False, "BANG!"],
            [False, False, False, False, False, "Danger"]]
+
+def voice(string):
+    wav = gTTS(string) 
+    wav.save('voice.wav')
+    display(Audio('voice.wav', autoplay=True))
+
 while True:
     success,img = cap.read()
     h,w,c = img.shape
@@ -49,13 +55,7 @@ while True:
                     if(gesture[i][j] != open[j]): flag = False
                 if(flag == True):
                     cv2.putText(img, gesture[i][5], (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)
+                    voice(gesture[i][5])
             mpDraw.draw_landmarks (img, handLms, mphands. HAND_CONNECTIONS)
     cv2.imshow("HandTracking", img)
     cv2.waitKey(1)
-
-
-
-def voice():
-    kor_wav = gTTS('안녕!', lang = 'ko') 
-    kor_wav.save('kor.wav')
-    display(Audio('kor.wav', autoplay=True))
