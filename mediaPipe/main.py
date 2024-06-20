@@ -78,3 +78,4 @@ while True:
             mpDraw.draw_landmarks (img, handLms, mphands. HAND_CONNECTIONS)
     cv2.imshow("HandTracking", img)
     cv2.waitKey(1)
+    GPIO.cleanup()
