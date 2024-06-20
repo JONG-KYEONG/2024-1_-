@@ -1,41 +1,61 @@
+import cv2
+import mediapipe as mp
+import math
+
 import RPi.GPIO as GPIO
-from RPLCD.gpio import CharLCD
 import time
 
-# Pin configuration using BCM numbering (same pins as in your C code)
-LCD_RS = 17  # BCM pin number for WiringPi 11
-LCD_E = 27   # BCM pin number for WiringPi 10
-LCD_D4 = 22  # BCM pin number for WiringPi 6
-LCD_D5 = 24  # BCM pin number for WiringPi 5
-LCD_D6 = 23  # BCM pin number for WiringPi 4
-LCD_D7 = 18  # BCM pin number for WiringPi 1
+# from gtts import gTTS
+# import playsound
 
-# Initialize GPIO
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)  # Use BCM pin numbering
+cap = cv2.VideoCapture(0)
 
-# Initialize the LCD using the pins above.
-lcd = CharLCD(cols=16, rows=2, pin_rs=LCD_RS, pin_e=LCD_E, pins_data=[LCD_D4, LCD_D5, LCD_D6, LCD_D7], numbering_mode=GPIO.BCM)
+mphands = mp.solutions.hands
+my_hands = mphands.Hands()
+mpDraw = mp.solutions.drawing_utils
 
-# Wait for LCD to initialize
-time.sleep(1)
+GPIO.setmode(GPIO.BCM) #BCM(BCM GPIO 기준), BOARD(보드 핀 번호 기준)
+GPIO.setup(16, GPIO.OUT) # 
+GPIO.output(16, GPIO.LOW)
+GPIO.setup(17, GPIO.OUT) # 
+GPIO.output(17, GPIO.LOW)
+GPIO.setup(18, GPIO.OUT) # 
+GPIO.output(18, GPIO.LOW)
+GPIO.setup(19, GPIO.OUT) # 
+GPIO.output(19, GPIO.LOW)
+GPIO.setup(20, GPIO.OUT) # 
+GPIO.output(20, GPIO.LOW)
 
-# Clear the LCD screen before writing
-lcd.clear()
+def dist(x1,y1,x2,y2):
+    return math.sqrt(math.pow(x1 - x2, 2)) + math.sqrt(math.pow(y1 - y2, 2))
+	@@ -35,18 +40,19 @@ def dist(x1,y1,x2,y2):
+           [True, True, False, False, False, "BANG!"],
+           [False, False, False, False, False, "Danger"]]
 
-# Display text on the LCD
-lcd.write_string("HI PYTHON!")
+def led_on(text):
+    if(text == "Danger"):
+        GPIO.output(16, GPIO.HIGH)
+        GPIO.output(17, GPIO.HIGH)
+        GPIO.output(18, GPIO.HIGH)
+        GPIO.output(19, GPIO.HIGH)
+        GPIO.output(20, GPIO.HIGH)
+    elif(text == "Hi!"):
+        GPIO.output(16, GPIO.HIGH)
+        GPIO.output(17, GPIO.LOW)
+        GPIO.output(18, GPIO.LOW)
+        GPIO.output(19, GPIO.LOW)
+        GPIO.output(20, GPIO.LOW)
 
-# Wait for user input
-input("Press Enter to continue...")
 
-# Clear the LCD screen
-lcd.clear()
-
-# Clean up GPIO
-GPIO.cleanup()
-
-
+while True:
+	@@ -67,7 +73,7 @@ def led_buzzer(text):
+                    if(gesture[i][j] != open[j]): flag = False
+                if(flag == True):
+                    cv2.putText(img, gesture[i][5], (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)
+                    led_on(gesture[i][5])
+                    # playsound.playsound (gesture[i][5]+'.mp3')
+            mpDraw.draw_landmarks (img, handLms, mphands. HAND_CONNECTIONS)
+    cv2.imshow("HandTracking", img)
 
 
 

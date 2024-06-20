@@ -31,14 +31,6 @@ def dist(x1,y1,x2,y2):
 
 compareIndex = [[18,4], [6,8], [10, 12], [14,16], [18,20]]
 open = [False,False,False,False,False]
-gesture = [[True, True, True, True, True, "Hi!"],
-           [False, True, True, False, False, "V!"],
-           [True, True, False, False, True, "SpiderMan!"],
-           [True, False, False, False, False, "Good!"],
-           [False, False, True, False, False, "Fuck!"],
-           [True, False, False, False, True, "Promise Me!"],
-           [True, True, False, False, False, "BANG!"],
-           [False, False, False, False, False, "Danger"]]
 
 def led_on(num):
     if(num == 0):
@@ -99,26 +91,16 @@ while True:
             print(open)
             text_x = (handLms.landmark[0].x * w)
             text_y= (handLms.landmark[0].y *h)
-            for i in range(0, len( gesture)):
-                number = 0
-                number = get_number(open)
-                if(number!=0):
-                    text = str(number) + " OPEN!"
-                    cv2.putText(img, text, (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)
-                    led_on(number)
-                else:
-                    text = "NO OPEN!"
-                    cv2.putText(img, text , (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)
-                    led_on(number)
-
-
-                # flag = True
-                # for j in range(0,5):
-                #     if(gesture[i][j] != open[j]): flag = False
-                # if(flag == True):
-                #     cv2.putText(img, gesture[i][5], (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)
-                #     led_on(gesture[i][5])
-                    # playsound.playsound (gesture[i][5]+'.mp3')
+            number = 0
+            number = get_number(open)
+            if(number!=0):
+                text = str(number) + " OPEN!"
+                cv2.putText(img, text, (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)
+                led_on(number)
+            else:
+                text = "NO OPEN!"
+                cv2.putText(img, text , (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)                    
+                led_on(number)
             mpDraw.draw_landmarks (img, handLms, mphands. HAND_CONNECTIONS)
     cv2.imshow("HandTracking", img)
     cv2.waitKey(1)
