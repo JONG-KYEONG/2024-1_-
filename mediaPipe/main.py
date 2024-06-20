@@ -15,11 +15,16 @@ my_hands = mphands.Hands()
 mpDraw = mp.solutions.drawing_utils
 
 GPIO.setmode(GPIO.BCM) #BCM(BCM GPIO 기준), BOARD(보드 핀 번호 기준)
-GPIO.setup(16, GPIO.OUT) # 빨간색 LED
+GPIO.setup(16, GPIO.OUT) # 
 GPIO.output(16, GPIO.LOW)
-GPIO.setup(18, GPIO.OUT) # 파란색 LED
+GPIO.setup(17, GPIO.OUT) # 
+GPIO.output(17, GPIO.LOW)
+GPIO.setup(18, GPIO.OUT) # 
 GPIO.output(18, GPIO.LOW)
-GPIO.setup(17, GPIO.OUT) # 부저
+GPIO.setup(19, GPIO.OUT) # 
+GPIO.output(19, GPIO.LOW)
+GPIO.setup(20, GPIO.OUT) # 
+GPIO.output(20, GPIO.LOW)
 
 def dist(x1,y1,x2,y2):
     return math.sqrt(math.pow(x1 - x2, 2)) + math.sqrt(math.pow(y1 - y2, 2))
@@ -35,18 +40,19 @@ gesture = [[True, True, True, True, True, "Hi!"],
            [True, True, False, False, False, "BANG!"],
            [False, False, False, False, False, "Danger"]]
 
-def led_buzzer(text):
+def led_on(text):
     if(text == "Danger"):
-        GPIO.output(18, GPIO.LOW)
-        for i in range(5):
-            GPIO.output(16, GPIO.HIGH)
-            GPIO.output(17, GPIO.HIGH)
-            time.sleep(1.0)
-            GPIO.output(16, GPIO.LOW)
-            GPIO.output(17, GPIO.LOW)
-            time.sleep(1.0)
-    else:
+        GPIO.output(16, GPIO.HIGH)
+        GPIO.output(17, GPIO.HIGH)
         GPIO.output(18, GPIO.HIGH)
+        GPIO.output(19, GPIO.HIGH)
+        GPIO.output(20, GPIO.HIGH)
+    elif(text == "Hi!"):
+        GPIO.output(16, GPIO.HIGH)
+        GPIO.output(17, GPIO.LOW)
+        GPIO.output(18, GPIO.LOW)
+        GPIO.output(19, GPIO.LOW)
+        GPIO.output(20, GPIO.LOW)
 
 
 while True:
@@ -67,7 +73,7 @@ while True:
                     if(gesture[i][j] != open[j]): flag = False
                 if(flag == True):
                     cv2.putText(img, gesture[i][5], (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)
-                    led_buzzer(gesture[i][5])
+                    led_on(gesture[i][5])
                     # playsound.playsound (gesture[i][5]+'.mp3')
             mpDraw.draw_landmarks (img, handLms, mphands. HAND_CONNECTIONS)
     cv2.imshow("HandTracking", img)
