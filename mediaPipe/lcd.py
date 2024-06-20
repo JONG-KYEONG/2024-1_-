@@ -2,20 +2,20 @@ import RPi.GPIO as GPIO
 from RPLCD.gpio import CharLCD
 import time
 
-# Pin configuration:
-LCD_RS = 11  # BOARD pin number for GPIO 11
-LCD_E = 10   # BOARD pin number for GPIO 10
-LCD_D4 = 6   # BOARD pin number for GPIO 6
-LCD_D5 = 5   # BOARD pin number for GPIO 5
-LCD_D6 = 4   # BOARD pin number for GPIO 4
-LCD_D7 = 1   # BOARD pin number for GPIO 1
+# Pin configuration using BCM numbering
+LCD_RS = 17  # BCM pin number for GPIO 11
+LCD_E = 22   # BCM pin number for GPIO 10
+LCD_D4 = 25  # BCM pin number for GPIO 6
+LCD_D5 = 24  # BCM pin number for GPIO 5
+LCD_D6 = 23  # BCM pin number for GPIO 4
+LCD_D7 = 18  # BCM pin number for GPIO 1
 
 # Initialize GPIO
 GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BOARD)  # Use BOARD pin numbering
+GPIO.setmode(GPIO.BCM)  # Use BCM pin numbering
 
 # Initialize the LCD using the pins above.
-lcd = CharLCD(cols=16, rows=2, pin_rs=LCD_RS, pin_e=LCD_E, pins_data=[LCD_D4, LCD_D5, LCD_D6, LCD_D7], numbering_mode=GPIO.BOARD)
+lcd = CharLCD(cols=16, rows=2, pin_rs=LCD_RS, pin_e=LCD_E, pins_data=[LCD_D4, LCD_D5, LCD_D6, LCD_D7], numbering_mode=GPIO.BCM)
 
 # Display text on the LCD
 lcd.write_string("HELLO WORLD")
