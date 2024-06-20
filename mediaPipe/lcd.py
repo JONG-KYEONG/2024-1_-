@@ -17,6 +17,12 @@ GPIO.setmode(GPIO.BCM)  # Use BCM pin numbering
 # Initialize the LCD using the pins above.
 lcd = CharLCD(cols=16, rows=2, pin_rs=LCD_RS, pin_e=LCD_E, pins_data=[LCD_D4, LCD_D5, LCD_D6, LCD_D7], numbering_mode=GPIO.BCM)
 
+# Wait for LCD to initialize
+time.sleep(1)
+
+# Clear the LCD screen before writing
+lcd.clear()
+
 # Display text on the LCD
 lcd.write_string("HELLO WORLD")
 
@@ -28,6 +34,7 @@ lcd.clear()
 
 # Clean up GPIO
 GPIO.cleanup()
+
 
 
 
