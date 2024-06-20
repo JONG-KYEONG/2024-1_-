@@ -103,10 +103,12 @@ while True:
                 number = 0
                 number = get_number(open)
                 if(number!=0):
-                    cv2.putText(img, "손가락 " + number + "개 폈네!", (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)
+                    text = number + " OPEN!"
+                    cv2.putText(img, text, (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)
                     led_on(number)
                 else:
-                    cv2.putText(img, "손가락 한개도 안폈네!", (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)
+                    text = "NO OPEN!"
+                    cv2.putText(img, text , (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)
                     led_on(number)
 
 
