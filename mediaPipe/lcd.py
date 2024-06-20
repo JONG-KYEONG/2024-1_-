@@ -1,33 +1,39 @@
-import wiringpi as wp
+import RPi.GPIO as GPIO
+from RPLCD.gpio import CharLCD
 import time
 
-# Pin configuration using WiringPi numbering
-LCD_RS = 11
-LCD_E = 10
-LCD_D4 = 6
-LCD_D5 = 5
-LCD_D6 = 4
-LCD_D7 = 1
+# Pin configuration using BCM numbering (same pins as in your C code)
+LCD_RS = 17  # BCM pin number for WiringPi 11
+LCD_E = 27   # BCM pin number for WiringPi 10
+LCD_D4 = 22  # BCM pin number for WiringPi 6
+LCD_D5 = 24  # BCM pin number for WiringPi 5
+LCD_D6 = 23  # BCM pin number for WiringPi 4
+LCD_D7 = 18  # BCM pin number for WiringPi 1
 
-# Initialize WiringPi and LCD
-wp.wiringPiSetup()
+# Initialize GPIO
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)  # Use BCM pin numbering
 
-lcd = wp.lcdInit(2, 16, 4, LCD_RS, LCD_E, LCD_D4, LCD_D5, LCD_D6, LCD_D7, 0, 0, 0, 0)
-if lcd == -1:
-    print("lcd init failed!")
-else:
-    # Clear the LCD screen before writing
-    wp.lcdClear(lcd)
-    
-    # Display text on the LCD
-    wp.lcdPosition(lcd, 0, 0)
-    wp.lcdPuts(lcd, "HI PYTHON")
-    
-    # Wait for user input
-    input("Press Enter to continue...")
+# Initialize the LCD using the pins above.
+lcd = CharLCD(cols=16, rows=2, pin_rs=LCD_RS, pin_e=LCD_E, pins_data=[LCD_D4, LCD_D5, LCD_D6, LCD_D7], numbering_mode=GPIO.BCM)
 
-    # Clear the LCD screen
-    wp.lcdClear(lcd)
+# Wait for LCD to initialize
+time.sleep(1)
+
+# Clear the LCD screen before writing
+lcd.clear()
+
+# Display text on the LCD
+lcd.write_string("HI PYTHON!")
+
+# Wait for user input
+input("Press Enter to continue...")
+
+# Clear the LCD screen
+lcd.clear()
+
+# Clean up GPIO
+GPIO.cleanup()
 
 
 
