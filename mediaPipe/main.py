@@ -40,19 +40,51 @@ gesture = [[True, True, True, True, True, "Hi!"],
            [True, True, False, False, False, "BANG!"],
            [False, False, False, False, False, "Danger"]]
 
-def led_on(text):
-    if(text == "Danger"):
-        GPIO.output(16, GPIO.HIGH)
-        GPIO.output(17, GPIO.HIGH)
-        GPIO.output(18, GPIO.HIGH)
-        GPIO.output(19, GPIO.HIGH)
-        GPIO.output(20, GPIO.HIGH)
-    elif(text == "Hi!"):
+def led_on(num):
+    if(num == 0):
+        GPIO.output(16, GPIO.LOW)
+        GPIO.output(17, GPIO.LOW)
+        GPIO.output(18, GPIO.LOW)
+        GPIO.output(19, GPIO.LOW)
+        GPIO.output(20, GPIO.LOW)
+    elif(num == 1):
         GPIO.output(16, GPIO.HIGH)
         GPIO.output(17, GPIO.LOW)
         GPIO.output(18, GPIO.LOW)
         GPIO.output(19, GPIO.LOW)
         GPIO.output(20, GPIO.LOW)
+    elif(num == 2):
+        GPIO.output(16, GPIO.HIGH)
+        GPIO.output(17, GPIO.HIGH)
+        GPIO.output(18, GPIO.LOW)
+        GPIO.output(19, GPIO.LOW)
+        GPIO.output(20, GPIO.LOW)
+    elif(num == 3):
+        GPIO.output(16, GPIO.HIGH)
+        GPIO.output(17, GPIO.HIGH)
+        GPIO.output(18, GPIO.HIGH)
+        GPIO.output(19, GPIO.LOW)
+        GPIO.output(20, GPIO.LOW)
+    elif(num == 4):
+        GPIO.output(16, GPIO.HIGH)
+        GPIO.output(17, GPIO.HIGH)
+        GPIO.output(18, GPIO.HIGH)
+        GPIO.output(19, GPIO.HIGH)
+        GPIO.output(20, GPIO.LOW)
+    elif(num == 5):
+        GPIO.output(16, GPIO.HIGH)
+        GPIO.output(17, GPIO.HIGH)
+        GPIO.output(18, GPIO.HIGH)
+        GPIO.output(19, GPIO.HIGH)
+        GPIO.output(20, GPIO.HIGH)
+
+
+def get_number(open):
+    number = 0
+    for i in range(0,5):
+        if(open[i]):
+            number = number + 1
+    return number
 
 
 while True:
@@ -68,12 +100,22 @@ while True:
             text_x = (handLms.landmark[0].x * w)
             text_y= (handLms.landmark[0].y *h)
             for i in range(0, len( gesture)):
-                flag = True
-                for j in range(0,5):
-                    if(gesture[i][j] != open[j]): flag = False
-                if(flag == True):
-                    cv2.putText(img, gesture[i][5], (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)
-                    led_on(gesture[i][5])
+                number = 0
+                number = get_number(open)
+                if(number!=0):
+                    cv2.putText(img, "손가락 " + number + "개 폈네!", (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)
+                    led_on(number)
+                else:
+                    cv2.putText(img, "손가락 한개도 안폈네!", (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)
+                    led_on(number)
+
+
+                # flag = True
+                # for j in range(0,5):
+                #     if(gesture[i][j] != open[j]): flag = False
+                # if(flag == True):
+                #     cv2.putText(img, gesture[i][5], (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)
+                #     led_on(gesture[i][5])
                     # playsound.playsound (gesture[i][5]+'.mp3')
             mpDraw.draw_landmarks (img, handLms, mphands. HAND_CONNECTIONS)
     cv2.imshow("HandTracking", img)
