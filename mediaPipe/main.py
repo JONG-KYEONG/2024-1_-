@@ -3,10 +3,7 @@ import mediapipe as mp
 import math
 
 import RPi.GPIO as GPIO
-import time
 
-# from gtts import gTTS
-# import playsound
 
 cap = cv2.VideoCapture(0)
 
@@ -14,16 +11,16 @@ mphands = mp.solutions.hands
 my_hands = mphands.Hands()
 mpDraw = mp.solutions.drawing_utils
 
-GPIO.setmode(GPIO.BCM) #BCM(BCM GPIO 기준), BOARD(보드 핀 번호 기준)
-GPIO.setup(16, GPIO.OUT) # 
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(16, GPIO.OUT) 
 GPIO.output(16, GPIO.LOW)
-GPIO.setup(17, GPIO.OUT) # 
+GPIO.setup(17, GPIO.OUT) 
 GPIO.output(17, GPIO.LOW)
-GPIO.setup(18, GPIO.OUT) # 
+GPIO.setup(18, GPIO.OUT) 
 GPIO.output(18, GPIO.LOW)
-GPIO.setup(19, GPIO.OUT) # 
+GPIO.setup(19, GPIO.OUT) 
 GPIO.output(19, GPIO.LOW)
-GPIO.setup(20, GPIO.OUT) # 
+GPIO.setup(20, GPIO.OUT) 
 GPIO.output(20, GPIO.LOW)
 
 def dist(x1,y1,x2,y2):
