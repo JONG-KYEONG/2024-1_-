@@ -1,8 +1,8 @@
 import RPi.GPIO as GPIO
 from RPLCD.gpio import CharLCD
-from time import sleep
+import time
 
-# Define LCD pin constants
+# Pin configuration:
 LCD_RS = 11
 LCD_E = 10
 LCD_D4 = 6
@@ -11,29 +11,23 @@ LCD_D6 = 4
 LCD_D7 = 1
 
 # Initialize GPIO
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(LCD_RS, GPIO.OUT)
-GPIO.setup(LCD_E, GPIO.OUT)
-GPIO.setup(LCD_D4, GPIO.OUT)
-GPIO.setup(LCD_D5, GPIO.OUT)
-GPIO.setup(LCD_D6, GPIO.OUT)
-GPIO.setup(LCD_D7, GPIO.OUT)
 GPIO.setwarnings(False)
-# Initialize the LCD
-lcd = CharLCD(cols=16, rows=2, pin_rs=LCD_RS, pin_e=LCD_E,
-              pins_data=[LCD_D4, LCD_D5, LCD_D6, LCD_D7],
-              numbering_mode=GPIO.BCM)
+GPIO.setmode(GPIO.BCM)
 
-try:
-    # Print a message to the LCD
-    lcd.write_string('HELLO WORLD')
-    
-    # Wait for user input
-    input("Press Enter to clear the display...")
-    lcd.clear()
-finally:
-    # Clean up GPIO settings
-    GPIO.cleanup()
+# Initialize the LCD using the pins above.
+lcd = CharLCD(cols=16, rows=2, pin_rs=LCD_RS, pin_e=LCD_E, pins_data=[LCD_D4, LCD_D5, LCD_D6, LCD_D7])
+
+# Display text on the LCD
+lcd.write_string("HELLO WORLD")
+
+# Wait for user input
+input("Press Enter to continue...")
+
+# Clear the LCD screen
+lcd.clear()
+
+# Clean up GPIO
+GPIO.cleanup()
 
 
 

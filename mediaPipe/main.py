@@ -3,9 +3,10 @@ import mediapipe as mp
 import math
 
 import RPi.GPIO as GPIO
-from gtts import gTTS
-import playsound
-# !pip install gTTS  다운!
+import time
+
+# from gtts import gTTS
+# import playsound
 
 cap = cv2.VideoCapture(0)
 
@@ -14,8 +15,11 @@ my_hands = mphands.Hands()
 mpDraw = mp.solutions.drawing_utils
 
 GPIO.setmode(GPIO.BCM) #BCM(BCM GPIO 기준), BOARD(보드 핀 번호 기준)
-GPIO.setup(16, GPIO.OUT)
+GPIO.setup(16, GPIO.OUT) # 빨간색 LED
 GPIO.output(16, GPIO.LOW)
+GPIO.setup(18, GPIO.OUT) # 파란색 LED
+GPIO.output(18, GPIO.LOW)
+GPIO.setup(17, GPIO.OUT) # 부저
 
 def dist(x1,y1,x2,y2):
     return math.sqrt(math.pow(x1 - x2, 2)) + math.sqrt(math.pow(y1 - y2, 2))
@@ -30,6 +34,20 @@ gesture = [[True, True, True, True, True, "Hi!"],
            [True, False, False, False, True, "Promise Me!"],
            [True, True, False, False, False, "BANG!"],
            [False, False, False, False, False, "Danger"]]
+
+def led_buzzer(text):
+    if(text == "Danger"):
+        GPIO.output(18, GPIO.LOW)
+        for i in range(5):
+            GPIO.output(16, GPIO.HIGH)
+            GPIO.output(17, GPIO.HIGH)
+            time.sleep(1.0)
+            GPIO.output(16, GPIO.LOW)
+            GPIO.output(17, GPIO.LOW)
+            time.sleep(1.0)
+    else:
+        GPIO.output(18, GPIO.HIGH)
+
 
 while True:
     success,img = cap.read()
@@ -49,7 +67,8 @@ while True:
                     if(gesture[i][j] != open[j]): flag = False
                 if(flag == True):
                     cv2.putText(img, gesture[i][5], (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)
-                    playsound.playsound (gesture[i][5]+'.mp3')
+                    led_buzzer(gesture[i][5])
+                    # playsound.playsound (gesture[i][5]+'.mp3')
             mpDraw.draw_landmarks (img, handLms, mphands. HAND_CONNECTIONS)
     cv2.imshow("HandTracking", img)
     cv2.waitKey(1)
