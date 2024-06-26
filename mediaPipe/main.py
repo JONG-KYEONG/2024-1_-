@@ -29,51 +29,18 @@ def dist(x1,y1,x2,y2):
 compareIndex = [[18,4], [6,8], [10, 12], [14,16], [18,20]]
 open = [False,False,False,False,False]
 
-def led_on(num):
-    if(num == 0):
-        GPIO.output(16, GPIO.LOW)
-        GPIO.output(17, GPIO.LOW)
-        GPIO.output(18, GPIO.LOW)
-        GPIO.output(19, GPIO.LOW)
-        GPIO.output(20, GPIO.LOW)
-    elif(num == 1):
-        GPIO.output(16, GPIO.HIGH)
-        GPIO.output(17, GPIO.LOW)
-        GPIO.output(18, GPIO.LOW)
-        GPIO.output(19, GPIO.LOW)
-        GPIO.output(20, GPIO.LOW)
-    elif(num == 2):
-        GPIO.output(16, GPIO.HIGH)
-        GPIO.output(17, GPIO.HIGH)
-        GPIO.output(18, GPIO.LOW)
-        GPIO.output(19, GPIO.LOW)
-        GPIO.output(20, GPIO.LOW)
-    elif(num == 3):
-        GPIO.output(16, GPIO.HIGH)
-        GPIO.output(17, GPIO.HIGH)
-        GPIO.output(18, GPIO.HIGH)
-        GPIO.output(19, GPIO.LOW)
-        GPIO.output(20, GPIO.LOW)
-    elif(num == 4):
-        GPIO.output(16, GPIO.HIGH)
-        GPIO.output(17, GPIO.HIGH)
-        GPIO.output(18, GPIO.HIGH)
-        GPIO.output(19, GPIO.HIGH)
-        GPIO.output(20, GPIO.LOW)
-    elif(num == 5):
-        GPIO.output(16, GPIO.HIGH)
-        GPIO.output(17, GPIO.HIGH)
-        GPIO.output(18, GPIO.HIGH)
-        GPIO.output(19, GPIO.HIGH)
-        GPIO.output(20, GPIO.HIGH)
-
-
-def get_number(open):
-    number = 0
+def led(open):
+    base = 16
+    text = ""
     for i in range(0,5):
         if(open[i]):
-            number = number + 1
-    return number
+            GPIO.output(base+i, GPIO.HIGH)
+            text = text + str(i) + " "
+        else: 
+            GPIO.output(20, GPIO.LOW)
+    text = text + ""
+    return text
+
 
 
 while True:
@@ -88,16 +55,8 @@ while True:
             print(open)
             text_x = (handLms.landmark[0].x * w)
             text_y= (handLms.landmark[0].y *h)
-            number = 0
-            number = get_number(open)
-            if(number!=0):
-                text = str(number) + " OPEN!"
-                cv2.putText(img, text, (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)
-                led_on(number)
-            else:
-                text = "NO OPEN!"
-                cv2.putText(img, text , (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)                    
-                led_on(number)
+            text = led(open)
+            cv2.putText(img, text, (round(text_x)-50, round(text_y) - 250),cv2.FONT_HERSHEY_PLAIN,4,(0,0,0),4)
             mpDraw.draw_landmarks (img, handLms, mphands. HAND_CONNECTIONS)
     cv2.imshow("HandTracking", img)
     cv2.waitKey(1)
