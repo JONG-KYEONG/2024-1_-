@@ -35,9 +35,9 @@ def led(open):
     for i in range(0,5):
         if(open[i]):
             GPIO.output(base+i, GPIO.HIGH)
-            text = text + str(i) + " "
+            text = text + str(i+1) + " "
         else: 
-            GPIO.output(20, GPIO.LOW)
+            GPIO.output(base+i, GPIO.LOW)
     text = text + ""
     return text
 
