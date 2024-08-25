@@ -10,6 +10,7 @@ import time
 
 cap = cv2.VideoCapture(0)
 
+
 mphands = mp.solutions.hands
 my_hands = mphands.Hands()
 mpDraw = mp.solutions.drawing_utils
